@@ -1,0 +1,132 @@
+-- ==========================================
+-- NeoTrack ERP
+-- 008 Manufacturing Tables
+-- ==========================================
+
+CREATE TABLE bom_header (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    bom_number VARCHAR(30) UNIQUE NOT NULL,
+
+    finished_good_id BIGINT REFERENCES items(id),
+
+    version_no INTEGER DEFAULT 1,
+
+    effective_date DATE,
+
+    status VARCHAR(30) DEFAULT 'Active',
+
+    remarks TEXT,
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE bom_details (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    bom_id BIGINT REFERENCES bom_header(id) ON DELETE CASCADE,
+
+    raw_material_id BIGINT REFERENCES items(id),
+
+    quantity NUMERIC(18,3),
+
+    wastage_percent NUMERIC(8,2) DEFAULT 0
+);
+
+CREATE TABLE production_order_header (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    production_number VARCHAR(30) UNIQUE NOT NULL,
+
+    production_date DATE NOT NULL,
+
+    bom_id BIGINT REFERENCES bom_header(id),
+
+    finished_good_id BIGINT REFERENCES items(id),
+
+    planned_quantity NUMERIC(18,3),
+
+    status VARCHAR(30) DEFAULT 'Draft',
+
+    remarks TEXT,
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE production_order_details (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    production_id BIGINT REFERENCES production_order_header(id) ON DELETE CASCADE,
+
+    raw_material_id BIGINT REFERENCES items(id),
+
+    required_quantity NUMERIC(18,3),
+
+    issued_quantity NUMERIC(18,3) DEFAULT 0,
+
+    consumed_quantity NUMERIC(18,3) DEFAULT 0
+);
+
+CREATE TABLE material_issue_header (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    issue_number VARCHAR(30) UNIQUE NOT NULL,
+
+    issue_date DATE NOT NULL,
+
+    production_id BIGINT REFERENCES production_order_header(id),
+
+    warehouse_id BIGINT REFERENCES warehouses(id),
+
+    status VARCHAR(30) DEFAULT 'Draft',
+
+    remarks TEXT,
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE material_issue_details (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    issue_id BIGINT REFERENCES material_issue_header(id) ON DELETE CASCADE,
+
+    item_id BIGINT REFERENCES items(id),
+
+    issued_quantity NUMERIC(18,3),
+
+    unit_cost NUMERIC(18,4),
+
+    line_total NUMERIC(18,2)
+);
+
+CREATE TABLE finished_goods_receipt_header (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    fgr_number VARCHAR(30) UNIQUE NOT NULL,
+
+    receipt_date DATE NOT NULL,
+
+    production_id BIGINT REFERENCES production_order_header(id),
+
+    warehouse_id BIGINT REFERENCES warehouses(id),
+
+    status VARCHAR(30) DEFAULT 'Draft',
+
+    remarks TEXT,
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE finished_goods_receipt_details (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    fgr_id BIGINT REFERENCES finished_goods_receipt_header(id) ON DELETE CASCADE,
+
+    item_id BIGINT REFERENCES items(id),
+
+    quantity NUMERIC(18,3),
+
+    unit_cost NUMERIC(18,4),
+
+    line_total NUMERIC(18,2)
+);
