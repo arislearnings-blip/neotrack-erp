@@ -144,3 +144,45 @@
 
 7150 Miscellaneous Expense
 
+
+
+
+# Manufacturing Account Mapping
+
+Raw Material Purchase
+
+Dr Raw Material Inventory
+
+Cr Accounts Payable
+
+---
+
+Material Issue To Production
+
+Dr Work In Process Inventory
+
+Cr Raw Material Inventory
+
+---
+
+Production Completion
+
+Dr Finished Goods Inventory
+
+Cr Work In Process Inventory
+
+---
+
+Sales Invoice
+
+Dr Accounts Receivable
+
+Cr Product Sales
+
+---
+
+COGS Posting
+
+Dr Cost Of Goods Sold
+
+Cr Finished Goods Inventory
