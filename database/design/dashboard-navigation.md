@@ -140,3 +140,33 @@ Dashboard Charts
 - Profit Trend
 - Receivable Aging
 - Payable Aging
+
+- # Transaction Center
+
+Purpose:
+
+Single Entry Point For All Transactions
+
+Options:
+
+Purchase Order
+Goods Receipt Note
+Supplier Bill
+Payment Voucher
+
+Quotation
+Sales Order
+Delivery Note
+Sales Invoice
+Receipt Voucher
+
+Stock Transfer
+Stock Adjustment
+Inventory Count
+
+Production Order
+Material Issue
+Finished Goods Receipt
+
+Journal Voucher
+Contra Voucher
