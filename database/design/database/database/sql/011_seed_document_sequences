@@ -1,0 +1,27 @@
+INSERT INTO document_sequences
+(document_type,prefix,current_number,number_length)
+VALUES
+
+('PURCHASE_ORDER','PO',0,5),
+
+('GRN','GRN',0,5),
+
+('SUPPLIER_BILL','BILL',0,5),
+
+('SALES_ORDER','SO',0,5),
+
+('DELIVERY_NOTE','DN',0,5),
+
+('SALES_INVOICE','INV',0,5),
+
+('RECEIPT','REC',0,5),
+
+('PAYMENT','PAY',0,5),
+
+('JOURNAL','JV',0,5),
+
+('PRODUCTION','PROD',0,5),
+
+('MATERIAL_ISSUE','MI',0,5),
+
+('FINISHED_GOODS_RECEIPT','FGR',0,5);
