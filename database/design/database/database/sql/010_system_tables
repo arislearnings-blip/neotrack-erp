@@ -1,0 +1,76 @@
+-- ==========================================
+-- NeoTrack ERP
+-- 010 System Tables
+-- ==========================================
+
+CREATE TABLE company_settings (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    company_name VARCHAR(200) NOT NULL,
+    company_code VARCHAR(50),
+    address TEXT,
+    city VARCHAR(100),
+    country VARCHAR(100),
+
+    phone VARCHAR(50),
+    mobile VARCHAR(50),
+    email VARCHAR(200),
+    website VARCHAR(200),
+
+    tax_number VARCHAR(100),
+
+    fiscal_year_start DATE,
+    fiscal_year_end DATE,
+
+    base_currency VARCHAR(20) DEFAULT 'PKR',
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE document_sequences (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    document_type VARCHAR(50) UNIQUE NOT NULL,
+
+    prefix VARCHAR(20) NOT NULL,
+
+    current_number BIGINT DEFAULT 0,
+
+    number_length INTEGER DEFAULT 5,
+
+    is_active BOOLEAN DEFAULT TRUE,
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE fiscal_years (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    year_code VARCHAR(20) UNIQUE NOT NULL,
+
+    start_date DATE NOT NULL,
+
+    end_date DATE NOT NULL,
+
+    is_closed BOOLEAN DEFAULT FALSE,
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE audit_log (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    table_name VARCHAR(100),
+
+    record_id BIGINT,
+
+    action_type VARCHAR(30),
+
+    old_value TEXT,
+
+    new_value TEXT,
+
+    user_id BIGINT REFERENCES users(id),
+
+    action_time TIMESTAMP DEFAULT NOW()
+);
