@@ -1,0 +1,138 @@
+-- ==========================================
+-- NeoTrack ERP
+-- 009 Accounting Tables
+-- ==========================================
+
+CREATE TABLE journal_header (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    journal_number VARCHAR(30) UNIQUE NOT NULL,
+
+    journal_date DATE NOT NULL,
+
+    reference_type VARCHAR(50),
+
+    reference_id BIGINT,
+
+    narration TEXT,
+
+    status VARCHAR(30) DEFAULT 'Draft',
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE journal_details (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    journal_id BIGINT REFERENCES journal_header(id) ON DELETE CASCADE,
+
+    account_id BIGINT REFERENCES chart_of_accounts(id),
+
+    debit_amount NUMERIC(18,2) DEFAULT 0,
+
+    credit_amount NUMERIC(18,2) DEFAULT 0,
+
+    description TEXT
+);
+
+CREATE TABLE receipt_voucher_header (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    receipt_number VARCHAR(30) UNIQUE NOT NULL,
+
+    receipt_date DATE NOT NULL,
+
+    customer_id BIGINT REFERENCES customers(id),
+
+    cash_bank_account_id BIGINT REFERENCES chart_of_accounts(id),
+
+    reference_no VARCHAR(100),
+
+    remarks TEXT,
+
+    status VARCHAR(30) DEFAULT 'Draft',
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE receipt_voucher_details (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    receipt_id BIGINT REFERENCES receipt_voucher_header(id) ON DELETE CASCADE,
+
+    invoice_id BIGINT REFERENCES sales_invoice_header(id),
+
+    received_amount NUMERIC(18,2),
+
+    discount_amount NUMERIC(18,2) DEFAULT 0,
+
+    adjustment_amount NUMERIC(18,2) DEFAULT 0
+);
+
+CREATE TABLE payment_voucher_header (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    payment_number VARCHAR(30) UNIQUE NOT NULL,
+
+    payment_date DATE NOT NULL,
+
+    supplier_id BIGINT REFERENCES suppliers(id),
+
+    cash_bank_account_id BIGINT REFERENCES chart_of_accounts(id),
+
+    reference_no VARCHAR(100),
+
+    remarks TEXT,
+
+    status VARCHAR(30) DEFAULT 'Draft',
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE payment_voucher_details (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    payment_id BIGINT REFERENCES payment_voucher_header(id) ON DELETE CASCADE,
+
+    bill_id BIGINT REFERENCES supplier_bill_header(id),
+
+    paid_amount NUMERIC(18,2),
+
+    discount_amount NUMERIC(18,2) DEFAULT 0,
+
+    adjustment_amount NUMERIC(18,2) DEFAULT 0
+);
+
+CREATE TABLE contra_voucher (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    contra_number VARCHAR(30) UNIQUE NOT NULL,
+
+    contra_date DATE NOT NULL,
+
+    from_account_id BIGINT REFERENCES chart_of_accounts(id),
+
+    to_account_id BIGINT REFERENCES chart_of_accounts(id),
+
+    amount NUMERIC(18,2),
+
+    remarks TEXT,
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE bank_reconciliation (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    bank_account_id BIGINT REFERENCES chart_of_accounts(id),
+
+    statement_date DATE,
+
+    opening_balance NUMERIC(18,2),
+
+    closing_balance NUMERIC(18,2),
+
+    status VARCHAR(30) DEFAULT 'Draft',
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
