@@ -5,6 +5,7 @@ Main Dashboard
 Dashboard
 
 ├── Masters
+├── Transaction Center
 ├── Purchasing
 ├── Sales
 ├── Inventory
